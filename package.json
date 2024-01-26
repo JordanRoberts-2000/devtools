@@ -18,7 +18,9 @@
     "@use-gesture/react": "^10.3.0",
     "highlight.js": "^11.9.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-query": "^3.39.3",
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.8",

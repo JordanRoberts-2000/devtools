@@ -5,8 +5,9 @@ export type NoteSections = {
     content?: string
 }
 
-export type TabSections = {
+export type TabSectionType = {
     id: number,
+    fileId: number,
     index: number,
     title: string
 }
@@ -14,10 +15,7 @@ export type TabSections = {
 export type TabSize = 0 | 1 | 2
 
 export type TabType = {
-    id: number,
-    title: string
-    dimensions?: {
-        width: number,
-        height: number
-    }
+    id: number | string,
+    title: string,
+    size: TabSize
 }

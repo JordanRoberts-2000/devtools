@@ -1,4 +1,4 @@
-import { HTMLAttributes, useContext, useEffect } from "react"
+import { HTMLAttributes, useContext } from "react"
 import { TabContext } from "../context/TabContextProvider"
 import { TabSize } from "../types"
 
