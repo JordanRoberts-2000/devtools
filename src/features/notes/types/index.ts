@@ -12,7 +12,7 @@ export type TabSectionType = {
     title: string
 }
 
-export type TabSize = 0 | 1 | 2
+export type TabSize = 1 | 2 | 3
 
 export type TabType = {
     id: number | string,

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import viewTransition from "../../../utils/viewTransition"
+import viewTransition from "../../../../../utils/viewTransition"
 
 type Props = {
     index: number

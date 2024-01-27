@@ -16,10 +16,12 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@tauri-apps/api": "^1.5.2",
     "@use-gesture/react": "^10.3.0",
+    "clsx": "^2.1.0",
     "highlight.js": "^11.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
+    "uuid": "^9.0.1",
     "zustand": "^4.5.0"
   },
   "devDependencies": {
@@ -27,6 +29,7 @@
     "@types/dom-view-transitions": "^1.0.4",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+    "@types/uuid": "^9.0.8",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.17",
     "postcss": "^8.4.33",

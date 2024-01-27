@@ -1,8 +1,8 @@
 import { create } from "zustand"
-import { TabSlice, tabSlice } from "./slices/tabsSlice"
+import { TabSlice, tabSlice } from "./slices/tabs.slice"
 
-const useStore = create<TabSlice>()((...a) => ({
+const noteStore = create<TabSlice>()((...a) => ({
     ...tabSlice(...a)
 }))
 
-export default useStore
+export default noteStore
