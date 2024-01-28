@@ -3,26 +3,31 @@ import NoteDragContext from "./dragging/NoteDragContext"
 import noteStore from "../../store/notesStore"
 import clsx from "clsx"
 import Tab from "./tab/Tab"
+import { useRef } from "react"
+import DragOverlays from "./dragging/isDraggingPopover/DragOverlays"
 
 const NoteDisplay = ({ }) => {
     const tabs = noteStore(state => state.tabs)
+    const noteSectionRef = useRef<HTMLDivElement>(null)
     const numberOfTabs = noteStore((state) => state.tabs.length);
     const noteDisplayClass = clsx(
-        'flex-[8] flex overflow-x-auto snap-mandatory snap-x ', {
+        'flex-[8] flex overflow-x-auto relative', {
         'justify-center': numberOfTabs === 1,
-        'pr-12': numberOfTabs > 2,
-        'pr-0': (numberOfTabs === 3 && tabs.every(tab => tab.size === 1))
+        'pr-12': numberOfTabs > 2 && !(numberOfTabs === 3 && tabs.every(tab => tab.size === 1))
     });
     return (
-        <div className={noteDisplayClass}>
-            <NoteDragContext>
+        <NoteDragContext noteSectionRef={noteSectionRef}>
+            <div className={noteDisplayClass} ref={noteSectionRef}>
                 <SortableContext items={tabs.map((tab) => tab.id)} strategy={horizontalListSortingStrategy}>
                     {tabs.map((tab) => (
                         <Tab key={tab.id} id={tab.id} title={tab.title} size={tab.size} />
                     ))}
                 </SortableContext>
-            </NoteDragContext>
-        </div>
+                <div className="bg-white/0 fixed top-0 left-0 w-full h-full pointer-events-none">
+                    <DragOverlays />
+                </div>
+            </div>
+        </NoteDragContext>
     )
 }
 

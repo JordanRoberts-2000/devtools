@@ -1,66 +1,123 @@
-import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core"
-import TabOverlay from "./TabOverlay"
+import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent, PointerSensor, rectIntersection, pointerWithin, useSensor, useSensors } from "@dnd-kit/core"
+import DragOverlays from "./isDraggingPopover/DragOverlays"
 import noteStore from "../../../store/notesStore"
 import { arrayMove } from "@dnd-kit/sortable"
 import { memo } from "react"
+import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import { restrictToElement } from "../../../utils/RestrictDragToElement";
 
 type Props = {
-    children: React.ReactNode
+    children: React.ReactNode,
+    noteSectionRef: React.RefObject<HTMLDivElement>
 }
 
-const NoteDragContext = ({ children }: Props) => {
+const NoteDragContext = ({ children, noteSectionRef }: Props) => {
     const sensor = useSensors(useSensor(PointerSensor, {
         activationConstraint: {
             distance: 2
         }
     }))
     const handleDragStart = (e: DragStartEvent) => {
-        // console.log(e.active)
         if (e.active.data.current?.type === "tab") {
-            noteStore.setState(() => ({ 
+            noteStore.setState(() => ({
                 draggingTab: {
-                    title: e.active.data.current?.tab.title, 
-                    size: 1, 
-                    id: "dragging", 
+                    title: e.active.data.current?.tab.title,
+                    size: 1,
+                    id: "draggingTab",
                     xy: {
                         x: e.active.data.current?.tab.xy.x,
                         y: e.active.data.current?.tab.xy.y,
-                    }} 
-                }))
+                    }
+                }
+            }))
             return;
         }
-        // if (e.active.data.current?.type === "tabSection") {
-        //     // setActiveTabSection(e.active.data.current.tabSection)
-        //     return
-        // }
+        if (e.active.data.current?.type === "tabSection") {
+            noteStore.setState(() => ({
+                draggingTabSection: {
+                    title: e.active.data.current?.tabSection.title,
+                    id: "draggingTabSection",
+                    fileId: e.active.data.current?.tabSection.fileId,
+                    xy: {
+                        x: e.active.data.current?.tabSection.xy.x,
+                        y: e.active.data.current?.tabSection.xy.y
+                    }
+                }
+            }))
+            return;
+        }
     }
     const handleDragOver = (event: DragOverEvent) => {
-        
-        // console.log(active)
-        // if (!over || active.id === over.id) return;
-        // const activeIsTabSection = active.data.current?.type === "tabSection";
-        // const overIsTabSection = over.data.current?.type === "tabSection";
-        // if (!activeIsTabSection) return;
+        const { active, over } = event;
+        if (!over || active.id === over.id) return;
+        const activeIsTabSection = active.data.current?.type === "tabSection";
+        const overIsTabSection = over.data.current?.type === "tabSection";
+        if (!activeIsTabSection) return;
 
-        // // Im dropping a Task over another Task
-        // if (overIsTabSection && activeIsTabSection) {
-        //     if (over.data.current!.tabSection.fileId !== active.data.current!.tabSection.fileId) {
+        // dropping a section over another tab
+        if (overIsTabSection && activeIsTabSection) {
+            if (over.data.current!.tabSection.fileId !== active.data.current!.tabSection.fileId) {
+                // not within same tab
+                // rezise
+                if (active.data.current?.tabSection.xy.x, over.data.current?.tabSection.xy.x) {
+                    noteStore.setState((state) => ({
+                        draggingTabSection: {
+                            ...state.draggingTabSection!,
+                            xy: {
+                                x: over.data.current?.tabSection.xy.x,
+                                y: over.data.current?.tabSection.xy.y
+                            }
+                        }
+                    }))
+                }
+                console.log("not within same tab")
+                noteStore.setState((state) => {
+                    const activeTabIndex = state.tabSectionData.findIndex((tab) => tab.id === active.id);
+                    const overTabIndex = state.tabSectionData.findIndex((tab) => tab.id === over.id);
+                    state.tabSectionData[activeTabIndex].fileId = state.tabSectionData[overTabIndex].fileId;
+                    // return ({ tabSectionData: arrayMove(state.tabSectionData, activeTabIndex, overTabIndex === 0 ? overTabIndex : overTabIndex - 1) })
+                    // [state.tabSectionData[activeTabIndex], state.tabSectionData[overTabIndex - 1]] = 
+                    // [state.tabSectionData[overTabIndex -1], state.tabSectionData[activeTabIndex]];
+                    // if(overTabIndex)
+                    // return ({ tabSectionData: state.tabSectionData })
+                    return ({ tabSectionData: arrayMove(state.tabSectionData, activeTabIndex, overTabIndex - 1) })
+                })
+            } else {
+                // within same tab
+                console.log("within same tab")
+                noteStore.setState((state) => {
+                    const activeTabIndex = state.tabSectionData.findIndex((tab) => tab.id === active.id);
+                    const overTabIndex = state.tabSectionData.findIndex((tab) => tab.id === over.id);
+                    return ({ tabSectionData: arrayMove(state.tabSectionData, activeTabIndex, overTabIndex) })
+                })
+            }
+        }
+        const isOverATab = over.data.current?.type === "tab";
 
-        //     } else {
-
-        //     }
-        // }
-        // const isOverAColumn = over.data.current?.type === "tab";
-
-        // // Im dropping a Task over a column
-        // if (activeIsTabSection && isOverAColumn) {
-        //     console.log("ATTEMPT", over.data.current!.tab.id)
-
-        // }
+        // dropping a section over a tab
+        // resize
+        if (activeIsTabSection && isOverATab) {
+            // noteStore.setState((state) => ({
+            //     draggingTabSection: {
+            //         ...state.draggingTabSection!,
+            //         xy: {
+            //             x: over.data.current?.tabSection.xy.x,
+            //             y: over.data.current?.tabSection.xy.y
+            //         }
+            //     }
+            // }))
+            // console.log("dropping a Task over a column", over.data.current!.tab.id)
+            // noteStore.setState((state) => {
+            //     const activeIndex = state.tabSectionData.findIndex((t) => t.id === active.id);
+            //     state.tabSectionData[activeIndex].fileId = over.id;
+            //     return state;
+            // });
+        }
 
     }
     const handleDragEnd = (event: DragEndEvent) => {
-        noteStore.setState(() => ({ draggingTab: null}));
+        noteStore.setState(() => ({ draggingTab: null }));
+        noteStore.setState(() => ({ draggingTabSection: null }));
         const { active, over } = event;
         if (!over) return;
         const activeId = active.id;
@@ -68,20 +125,18 @@ const NoteDragContext = ({ children }: Props) => {
         if (activeId === overId) return;
         const isActiveAColumn = active.data.current?.type === "tab";
         if (!isActiveAColumn) return;
-        console.log(activeId, overId)
         noteStore.setState((state) => {
             const activeColumnIndex = state.tabs.findIndex((tab) => tab.id === activeId);
             const overColumnIndex = state.tabs.findIndex((tab) => tab.id === overId);
             return ({ tabs: arrayMove(state.tabs, activeColumnIndex, overColumnIndex) })
         })
-        // setActiveTabSection(null);
-        
     }
+    const tabActive = noteStore(state => state.draggingTab)
+    const collision = tabActive ? rectIntersection : pointerWithin
     return (
-        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} autoScroll={true}
-            sensors={sensor} onDragOver={handleDragOver} >
+        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} autoScroll={false} collisionDetection={collision}
+            sensors={sensor} onDragOver={handleDragOver} modifiers={[restrictToElement(noteSectionRef)]}>
             {children}
-            <TabOverlay />
         </DndContext>
     )
 }

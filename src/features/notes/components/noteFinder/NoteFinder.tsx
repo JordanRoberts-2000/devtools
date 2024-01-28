@@ -12,26 +12,43 @@ const NoteFinder = ({ }) => {
         })
     }
     return (
-        <div className="flex-[2] bg-gray-200">
+        <div className="flex-[2] bg-gray-200 h-screen overflow-y-auto z-20">
             <ul className="flex flex-col mb-4">
                 <li><button onClick={() => removeAllTabs()} className="border-2 border-black px-2">close all tabs</button></li>
                 <li><button onClick={() => addTab(uuidv4())} className="border-2 border-black px-2">add tab</button></li>
                 <li><button onClick={() => resetTabSizes(2)} className="border-2 border-black px-2">reset all sizes</button></li>
             </ul>
             <ul>
-                <li>id not 0 check</li>
-                <li>dragend error handle</li>
+                <li>stop snap-x while dragging</li>
+                <li>snap x off atm turn on</li>
+                <li>create/fix own swap functions</li>
+                <li>0 id check, change to uuid</li>
                 <li>disable drag when just 1??</li>
-                <li>prevent overlay from leaving box</li>
+                <li>add to empty tab</li>
+                <li>draggable wrapper on section</li>
+                <li>memoize tab sections</li>
+                <li className="mb-2">dif size hover, el to mouse</li>
+                <li><strong>Goal</strong>: all sections</li>
+                <li>dont rerender on switch</li>
                 <li>----------------------------------</li>
-                <li>default size & reset all sizes to it</li>
-                <li>loading / error state</li>
-                <li>on dragover, error handling</li>
-                <li>sections view transition</li>
-                <li>change size of section on hover?</li>
-                <li>notes move around</li>
                 <li>add sections</li>
-                <li>vertical scroll in tabs</li>
+                <li>change tab title</li>
+                <li>change section title</li>
+                <li>editable mode?</li>
+                <li>sort by index once</li>
+                <li>blur mode</li>
+                <li>----------------------------------</li>
+                <li>when 0 tabs what?</li>
+                <li>custom smoove autoscroll while dragging</li>
+                <li>pr-12 is causing shift</li>
+                <li>draggable overlay content from cache</li>
+                <li>border of isDragging, small shift</li>
+                <li>code split</li>
+                <li>1 tab - all sections on left</li>
+                <li>loading / error state</li>
+                <li>drag, error handling</li>
+                <li>sections view transition</li>
+                <li>notes move around</li>
                 <li>vertical scroll snap on sections</li>
                 <li>add notes</li>
                 <li>note, code, br, list</li>

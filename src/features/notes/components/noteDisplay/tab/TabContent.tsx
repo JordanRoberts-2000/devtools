@@ -1,28 +1,23 @@
-// import TabSection from "./TabSection"
-// import { SortableContext } from "@dnd-kit/sortable"
+import TabSection from "./TabSection"
+import { SortableContext, rectSwappingStrategy } from "@dnd-kit/sortable"
 
 import { memo } from "react"
+import noteStore from "../../../store/notesStore"
 
 type Props = {
     tabId: number | string
 }
 
 const TabContent = ({ tabId }: Props) => {
+    const taskSectionData = noteStore(state => state.tabSectionData.filter(el => el.fileId === tabId))
+    const taskSectionIds = taskSectionData.map(tab => tab.id)
     return (
-        <div>
-            {tabId}
-            {/* <SortableContext items={data}>
-                {data.map((el) => {
-                    return <TabSection key={el.id} tabSectionData={el} />
+        <div className="flex-1 shrink-0 overflow-y-auto">
+            <SortableContext items={taskSectionIds} strategy={rectSwappingStrategy}>
+                {taskSectionData.map((el) => {
+                    return <TabSection key={el.id} title={el.title} id={el.id} fileId={el.fileId} index={el.index} />
                 })}
             </SortableContext>
-            {(editModeActive || !data.length) &&
-                <button
-                    // <button onClick={() => setNoteSections([...noteSections, 1])}
-                    className="border-2 border-black hover:rounded-[100%] rounded-[25%] duration-500 px-2 bg-white flex justify-center items-center mx-auto">
-                    +
-                </button>
-            } */}
         </div>
     )
 }

@@ -6,11 +6,15 @@ export type NoteSections = {
 }
 
 export type TabSectionType = {
-    id: number,
-    fileId: number,
-    index: number,
+    id: number | string,
+    fileId: number | string,
+    index?: number,
     title: string
 }
+
+export type DraggingTabSection = Omit<TabSectionType, "index"> & {
+    xy: { x: number | null; y: number | null };
+};
 
 export type TabSize = 1 | 2 | 3
 

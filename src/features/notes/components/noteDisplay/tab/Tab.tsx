@@ -8,12 +8,13 @@ import { TabType } from "../../../types";
 import noteStore from "../../../store/notesStore";
 import TabContent from "./TabContent";
 import DraggableWrapper from "../dragging/DraggableWrapper";
+import TabIsDragging from "../dragging/isDraggingPopover/TabIsDragging";
 
-const Tab = ({ title, size, id, style }: TabType & { style?: React.CSSProperties }) => {
+const Tab = ({ title, id, size, style }: TabType & { style?: React.CSSProperties }) => {
     const increaseTabSize = noteStore(state => state.increaseTabSize);
     const decreaseTabSize = noteStore(state => state.decreaseTabSize);
     const [xy, setXy] = useState<{ x: number | null, y: number | null }>({ x: null, y: null })
-    const { attributes, listeners, setNodeRef, node, transform, transition } = useSortable({
+    const { attributes, listeners, setNodeRef, node, transform, transition, isDragging } = useSortable({
         id,
         disabled: xy.x ? false : true,
         data: {
@@ -53,11 +54,12 @@ const Tab = ({ title, size, id, style }: TabType & { style?: React.CSSProperties
     }
     )
     const tabClass = clsx(
-        'border-2 border-black bg-white shrink-0 snap-start', {
+        'border-2 border-black bg-white shrink-0 snap-start h-screen flex flex-col', {
         'w-1/3': size === 1,
         'w-1/2': size === 2,
         'w-2/3': size === 3
     });
+    if (isDragging) return <TabIsDragging tabSize={size} style={dragStyles} ref={setNodeRef} />
     return (
         <div style={{ ...style, ...dragStyles }} ref={setNodeRef}
             className={tabClass}>
