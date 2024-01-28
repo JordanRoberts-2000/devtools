@@ -19,6 +19,16 @@ const NoteFinder = ({ }) => {
                 <li><button onClick={() => resetTabSizes(2)} className="border-2 border-black px-2">reset all sizes</button></li>
             </ul>
             <ul>
+                <li>zustand subscribe, transient updates</li>
+                <li>immer?</li>
+                <li>only letters and numbers title</li>
+                <li>----------------------------------</li>
+                <li>sections title edit</li>
+                <li>edit state seperate</li>
+                <li>index edit/save/order</li>
+                <li>revert to old state</li>
+                <li>tab has changes to save?</li>
+                <li>----------------------------------</li>
                 <li>stop snap-x while dragging</li>
                 <li>snap x off atm turn on</li>
                 <li>create/fix own swap functions</li>
