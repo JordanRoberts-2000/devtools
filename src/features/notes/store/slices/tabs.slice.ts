@@ -1,11 +1,12 @@
 import { StateCreator } from "zustand";
 import { TabSize, TabType } from "../../types";
 import defaultTabData from "../../data/tabs.json"
+import { v4 as uuidv4 } from 'uuid';
 
 export type TabSlice = {
     tabs: TabType[],
     draggingTab: (TabType & { xy: { x: number | null, y: number | null } }) | null,
-    addTab: (id: number | string) => void,
+    addTab: () => void,
     removeTab: (id: number | string) => void,
     removeAllTabs: () => void,
     increaseTabSize: (id: number | string) => void,
@@ -17,14 +18,14 @@ export type TabSlice = {
 export const tabSlice: StateCreator<TabSlice> = (set) => ({
     tabs: defaultTabData.map((tabdata) => ({ ...tabdata, size: 2 })),
     draggingTab: null,
-    addTab: (id) => set((state) => {
+    addTab: () => set((state) => {
         if (state.tabs.length === 0) {
-            return { tabs: [{ id, title: "default", size: 3 }] }
+            return { tabs: [{ id: uuidv4(), title: "default", size: 3 }] }
         }
         if (state.tabs.length === 1) {
-            return ({ tabs: [{ id: state.tabs[0].id, title: state.tabs[0].title, size: 2 }, { id, title: "default", size: 2 }] });
+            return ({ tabs: [{ id: state.tabs[0].id, title: state.tabs[0].title, size: 2 }, { id: uuidv4(), title: "default", size: 2 }] });
         }
-        return { tabs: [...state.tabs, { id, title: "default", size: 2 }] }
+        return { tabs: [...state.tabs, { id: uuidv4(), title: "default", size: 2 }] }
     }),
     removeTab: (id) => set((state) => {
         const filteredTabs = state.tabs.filter((el) => el.id !== id)

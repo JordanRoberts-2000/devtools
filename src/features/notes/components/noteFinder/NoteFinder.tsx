@@ -1,5 +1,4 @@
 import noteStore from "../../store/notesStore"
-import { v4 as uuidv4 } from 'uuid';
 import { TabSize } from "../../types";
 
 const NoteFinder = ({ }) => {
@@ -15,14 +14,20 @@ const NoteFinder = ({ }) => {
         <div className="flex-[2] bg-gray-200 h-screen overflow-y-auto z-20">
             <ul className="flex flex-col mb-4">
                 <li><button onClick={() => removeAllTabs()} className="border-2 border-black px-2">close all tabs</button></li>
-                <li><button onClick={() => addTab(uuidv4())} className="border-2 border-black px-2">add tab</button></li>
+                <li><button onClick={() => addTab()} className="border-2 border-black px-2">add tab</button></li>
                 <li><button onClick={() => resetTabSizes(2)} className="border-2 border-black px-2">reset all sizes</button></li>
             </ul>
             <ul>
                 <li>zustand subscribe, transient updates</li>
                 <li>immer?</li>
                 <li>only letters and numbers title</li>
+                <li>trim, atleast 3 letter not spaces</li>
                 <li>----------------------------------</li>
+                <li>section component refactor</li>
+                <li>variable height dragging???</li>
+                <li>exit title edit, no change</li>
+                <li>delete/add tabs</li>
+                <li>blur mode</li>
                 <li>sections title edit</li>
                 <li>edit state seperate</li>
                 <li>index edit/save/order</li>
@@ -60,6 +65,7 @@ const NoteFinder = ({ }) => {
                 <li>sections view transition</li>
                 <li>notes move around</li>
                 <li>vertical scroll snap on sections</li>
+                <li>auto scroll vertical when dragging</li>
                 <li>add notes</li>
                 <li>note, code, br, list</li>
                 <li>delete notes, sections, are you sure?</li>

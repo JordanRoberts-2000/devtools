@@ -8,7 +8,6 @@ type Props = {
 }
 
 const TabTitle = ({ title, tabId }: Props) => {
-    const [ editedTitle, setEditedTitle ] = useState(null);
     const [ titleEditable, setTitleEditable ] = useState(false);
     const editTitle = noteStore(state => state.editTitle);
     const removeTab = noteStore(state => state.removeTab);
@@ -17,7 +16,6 @@ const TabTitle = ({ title, tabId }: Props) => {
     const handleEditTitle = (e: any) => {
         setTitleEditable(false);
         if(e.target.value.length === 0)return
-        setEditedTitle(e.target.value);
         editTitle(tabId, e.target.value);
     }
     return (
@@ -29,11 +27,12 @@ const TabTitle = ({ title, tabId }: Props) => {
                 </div>
             }
             {!titleEditable ? 
-                <div className="ml-4" onDoubleClick={() => setTitleEditable(true)}>
-                    {editedTitle ?? title}
+                <div className="px-2" onDoubleClick={() => setTitleEditable(true)}>
+                    {title}
                 </div>
             :
-                <input type="text" autoFocus defaultValue={title} onKeyDown={(e) => {if(e.key === "Enter")handleEditTitle(e)}} 
+                <input className="px-2"
+                    type="text" autoFocus defaultValue={title} onKeyDown={(e) => {if(e.key === "Enter")handleEditTitle(e)}} 
                     onBlur={(e) => handleEditTitle(e)}/>
             }
             <ul className="ml-auto mr-2 gap-4 flex">
