@@ -1,10 +1,9 @@
 import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent, PointerSensor, rectIntersection, pointerWithin, useSensor, useSensors } from "@dnd-kit/core"
-import DragOverlays from "./isDraggingPopover/DragOverlays"
-import noteStore from "../../../store/notesStore"
+import noteStore from "../store/notesStore"
 import { arrayMove } from "@dnd-kit/sortable"
 import { memo } from "react"
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
-import { restrictToElement } from "../../../utils/RestrictDragToElement";
+import { restrictToElement } from "../utils/RestrictDragToElement";
 
 type Props = {
     children: React.ReactNode,
@@ -18,6 +17,8 @@ const NoteDragContext = ({ children, noteSectionRef }: Props) => {
         }
     }))
     const handleDragStart = (e: DragStartEvent) => {
+        document.querySelectorAll(".accordion").forEach((el) => {
+            el.setAttribute("opening", '')})
         if (e.active.data.current?.type === "tab") {
             noteStore.setState(() => ({
                 draggingTab: {
@@ -65,26 +66,23 @@ const NoteDragContext = ({ children, noteSectionRef }: Props) => {
                             ...state.draggingTabSection!,
                             xy: {
                                 x: over.data.current?.tabSection.xy.x,
-                                y: over.data.current?.tabSection.xy.y
+                                y: state.draggingTabSection?.xy.y!
                             }
                         }
                     }))
                 }
-                console.log("not within same tab")
+                // not within same tab
                 noteStore.setState((state) => {
                     const activeTabIndex = state.tabSectionData.findIndex((tab) => tab.id === active.id);
                     const overTabIndex = state.tabSectionData.findIndex((tab) => tab.id === over.id);
                     state.tabSectionData[activeTabIndex].fileId = state.tabSectionData[overTabIndex].fileId;
-                    // return ({ tabSectionData: arrayMove(state.tabSectionData, activeTabIndex, overTabIndex === 0 ? overTabIndex : overTabIndex - 1) })
-                    // [state.tabSectionData[activeTabIndex], state.tabSectionData[overTabIndex - 1]] = 
-                    // [state.tabSectionData[overTabIndex -1], state.tabSectionData[activeTabIndex]];
-                    // if(overTabIndex)
-                    // return ({ tabSectionData: state.tabSectionData })
-                    return ({ tabSectionData: arrayMove(state.tabSectionData, activeTabIndex, overTabIndex - 1) })
+                    const overIndex = state.tabs.findIndex(obj => obj.id === over.data.current?.tabSection.fileId)
+                    const activeIndex = state.tabs.findIndex(obj => obj.id === active.data.current?.tabSection.fileId)
+                    const modifier = overIndex > activeIndex ? -1 : 0
+                    return ({ tabSectionData: arrayMove(state.tabSectionData, activeTabIndex, overTabIndex + modifier) })
                 })
             } else {
                 // within same tab
-                console.log("within same tab")
                 noteStore.setState((state) => {
                     const activeTabIndex = state.tabSectionData.findIndex((tab) => tab.id === active.id);
                     const overTabIndex = state.tabSectionData.findIndex((tab) => tab.id === over.id);
@@ -102,7 +100,7 @@ const NoteDragContext = ({ children, noteSectionRef }: Props) => {
             //         ...state.draggingTabSection!,
             //         xy: {
             //             x: over.data.current?.tabSection.xy.x,
-            //             y: over.data.current?.tabSection.xy.y
+            //             y: state.draggingTabSection?.xy.y!
             //         }
             //     }
             // }))
@@ -116,6 +114,8 @@ const NoteDragContext = ({ children, noteSectionRef }: Props) => {
 
     }
     const handleDragEnd = (event: DragEndEvent) => {
+        document.querySelectorAll(".accordion").forEach((el) => {
+            el.removeAttribute("opening")})
         noteStore.setState(() => ({ draggingTab: null }));
         noteStore.setState(() => ({ draggingTabSection: null }));
         const { active, over } = event;
@@ -135,7 +135,7 @@ const NoteDragContext = ({ children, noteSectionRef }: Props) => {
     const collision = tabActive ? rectIntersection : pointerWithin
     return (
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} autoScroll={false} collisionDetection={collision}
-            sensors={sensor} onDragOver={handleDragOver} modifiers={[restrictToElement(noteSectionRef)]}>
+            sensors={sensor} onDragOver={handleDragOver} modifiers={[restrictToElement(noteSectionRef), snapCenterToCursor]}>
             {children}
         </DndContext>
     )

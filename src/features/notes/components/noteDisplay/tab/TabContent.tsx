@@ -1,4 +1,4 @@
-import TabSection from "./TabSection"
+import TabSection from "./tabSection/TabSection"
 import { SortableContext, rectSwappingStrategy } from "@dnd-kit/sortable"
 
 import { memo } from "react"

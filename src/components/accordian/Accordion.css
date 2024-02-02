@@ -1,0 +1,11 @@
+.accordion{
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 0.5s ease;
+    transition-delay: .4s;
+}
+
+.accordion[opening]{
+    grid-template-rows: 0fr;
+    transition-delay: 0s;
+}

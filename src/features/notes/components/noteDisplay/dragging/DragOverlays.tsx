@@ -1,9 +1,9 @@
 import { createPortal } from "react-dom"
 import { DragOverlay } from "@dnd-kit/core"
-import noteStore from "../../../../store/notesStore"
-import Tab from "../../tab/Tab"
+import noteStore from "../../../store/notesStore"
+import Tab from "../tab/Tab"
 import { memo } from "react"
-import TabSection from "../../tab/TabSection"
+import TabSection from "../tab/tabSection/TabSection"
 // import TabSection from "../../tabs/TabSection"
 // import Tab from "../tab/Tab"
 
@@ -17,7 +17,7 @@ const DragOverlays = ( ) => {
                     {draggingTab && <Tab title={draggingTab.title} id={draggingTab.id} size={draggingTab.size}
                         style={{width: draggingTab.xy.x!, height: draggingTab.xy.y!}} />}
                     {draggingTabSection && <TabSection title={draggingTabSection.title} id={draggingTabSection!.id}
-                        fileId={draggingTabSection.fileId} style={{width: draggingTabSection.xy.x!, height: draggingTabSection.xy.y!}} />}
+                        fileId={draggingTabSection.fileId} style={{width: draggingTabSection.xy.x!}} />}
                 </DragOverlay>
               
         </>

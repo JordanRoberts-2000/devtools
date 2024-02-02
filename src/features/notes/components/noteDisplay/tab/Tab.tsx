@@ -7,8 +7,8 @@ import { useGesture } from '@use-gesture/react'
 import { TabType } from "../../../types";
 import noteStore from "../../../store/notesStore";
 import TabContent from "./TabContent";
-import DraggableWrapper from "../dragging/DraggableWrapper";
-import TabIsDragging from "../dragging/isDraggingPopover/TabIsDragging";
+import DraggableWrapper from "../../../utils/DraggableWrapper";
+import TabIsDragging from "../dragging/TabIsDragging";
 
 const Tab = ({ title, id, size, style }: TabType & { style?: React.CSSProperties }) => {
     const increaseTabSize = noteStore(state => state.increaseTabSize);
@@ -54,7 +54,7 @@ const Tab = ({ title, id, size, style }: TabType & { style?: React.CSSProperties
     }
     )
     const tabClass = clsx(
-        'border-2 border-black bg-white shrink-0 snap-start h-screen flex flex-col', {
+        'border-2 bg-white shrink-0 snap-start h-screen flex flex-col', {
         'w-1/3': size === 1,
         'w-1/2': size === 2,
         'w-2/3': size === 3
@@ -63,7 +63,7 @@ const Tab = ({ title, id, size, style }: TabType & { style?: React.CSSProperties
     return (
         <div style={{ ...style, ...dragStyles }} ref={setNodeRef}
             className={tabClass}>
-            <DraggableWrapper className="p-2 border-2 border-black flex" {...attributes} {...listeners}>
+            <DraggableWrapper className="p-2 border border-y-2  flex" {...attributes} {...listeners}>
                 <TabTitle title={title} tabId={id} />
             </DraggableWrapper>
             <TabContent tabId={id} />

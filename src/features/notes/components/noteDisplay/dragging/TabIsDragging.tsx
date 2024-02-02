@@ -1,5 +1,5 @@
 import { HTMLAttributes, forwardRef } from "react"
-import { TabSize } from "../../../../types"
+import { TabSize } from "../../../types"
 import clsx from 'clsx'
 
 type Props = HTMLAttributes<HTMLDivElement> & {
