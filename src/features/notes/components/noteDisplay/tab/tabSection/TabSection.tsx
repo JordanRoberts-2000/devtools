@@ -69,13 +69,13 @@ const TabSection = ({ id, title, index, titleMode, fileId, style, isOverlay }: P
                         </div>
                     ))}
                     {!defaultNoteData.filter((el) => el.sectionId === id).length &&
-                        // <button className="px-4 py-1 border-2 font-medium text-gray-700 rounded-md text-sm"
-                        //     onClick={() => { }}>
-                        //     add section
-                        // </button>
-                        <div contentEditable="plaintext-only" onInput={() => handleOnChange()}>
-                            eek
-                        </div>
+                        <button className="px-4 py-1 border-2 font-medium text-gray-700 rounded-md text-sm"
+                            onClick={() => { }}>
+                            add section
+                        </button>
+                        // <div contentEditable="plaintext-only" onInput={() => handleOnChange()}>
+                        //     eek
+                        // </div>
                         // <div>soup</div>
                     }
                 </Accordion>

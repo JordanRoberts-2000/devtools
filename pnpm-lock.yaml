@@ -38,6 +38,9 @@ dependencies:
   react-query:
     specifier: ^3.39.3
     version: 3.39.3(react-dom@18.2.0)(react@18.2.0)
+  tauri-plugin-sql-api:
+    specifier: github:tauri-apps/tauri-plugin-sql#v1
+    version: github.com/tauri-apps/tauri-plugin-sql/a31253b6a3da1f97a8a815747761f7ab6c21420a
   uuid:
     specifier: ^9.0.1
     version: 9.0.1
@@ -2090,4 +2093,12 @@ packages:
       '@types/react': 18.2.48
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  github.com/tauri-apps/tauri-plugin-sql/a31253b6a3da1f97a8a815747761f7ab6c21420a:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-sql/tar.gz/a31253b6a3da1f97a8a815747761f7ab6c21420a}
+    name: tauri-plugin-sql-api
+    version: 0.0.0
+    dependencies:
+      '@tauri-apps/api': 1.5.3
     dev: false
