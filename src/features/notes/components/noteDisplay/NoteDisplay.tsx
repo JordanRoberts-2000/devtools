@@ -21,7 +21,7 @@ const NoteDisplay = ({ }) => {
                 {/* <div>search tab</div> */}
                 <SortableContext items={tabs.map((tab) => tab.id)} strategy={horizontalListSortingStrategy}>
                     {tabs.map((tab) => (
-                        <Tab key={tab.id} id={tab.id} title={tab.title} size={tab.size} />
+                        <Tab key={tab.id} id={tab.id} title={tab.title} size={tab.size} titleMode={tab.titleMode} />
                     ))}
                 </SortableContext>
                 <div className="bg-white/0 fixed top-0 left-0 w-full h-full pointer-events-none">

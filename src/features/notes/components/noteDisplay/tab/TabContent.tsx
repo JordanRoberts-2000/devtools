@@ -5,10 +5,11 @@ import { memo } from "react"
 import noteStore from "../../../store/notesStore"
 
 type Props = {
-    tabId: number | string
+    tabId: number | string,
+    titleMode?: boolean
 }
 
-const TabContent = ({ tabId }: Props) => {
+const TabContent = ({ tabId, titleMode }: Props) => {
     const taskSectionData = noteStore(state => state.tabSectionData.filter(el => el.fileId === tabId))
     const taskSectionIds = taskSectionData.map(tab => tab.id)
     const addTask = noteStore(state => state.addTabSection)
@@ -16,7 +17,7 @@ const TabContent = ({ tabId }: Props) => {
         <div className="flex-1 shrink-0 overflow-y-auto pb-12">
             <SortableContext items={taskSectionIds} strategy={rectSwappingStrategy}>
                 {taskSectionData.map((el) => {
-                    return <TabSection key={el.id} title={el.title} id={el.id} fileId={el.fileId} index={el.index} />
+                    return <TabSection key={el.id} titleMode={titleMode} title={el.title} id={el.id} fileId={el.fileId} index={el.index} />
                 })}
             </SortableContext>
             <div className="flex justify-center mt-4">

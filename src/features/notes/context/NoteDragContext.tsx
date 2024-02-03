@@ -2,7 +2,7 @@ import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent, PointerSensor,
 import noteStore from "../store/notesStore"
 import { arrayMove } from "@dnd-kit/sortable"
 import { memo } from "react"
-import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import { restrictToParentElement, snapCenterToCursor } from "@dnd-kit/modifiers";
 import { restrictToElement } from "../utils/RestrictDragToElement";
 
 type Props = {
@@ -11,20 +11,20 @@ type Props = {
 }
 
 const NoteDragContext = ({ children, noteSectionRef }: Props) => {
+    const setAllTabsTitleMode = noteStore(state => state.setAllTabsTitleMode)
     const sensor = useSensors(useSensor(PointerSensor, {
         activationConstraint: {
             distance: 2
         }
     }))
     const handleDragStart = (e: DragStartEvent) => {
-        document.querySelectorAll(".accordion").forEach((el) => {
-            el.setAttribute("opening", '')})
+        setAllTabsTitleMode(true);
         if (e.active.data.current?.type === "tab") {
-            noteStore.setState(() => ({
+            noteStore.setState((state) => ({
                 draggingTab: {
                     title: e.active.data.current?.tab.title,
                     size: 1,
-                    id: "draggingTab",
+                    id: e.active.data.current?.tab.id,
                     xy: {
                         x: e.active.data.current?.tab.xy.x,
                         y: e.active.data.current?.tab.xy.y,
@@ -37,7 +37,7 @@ const NoteDragContext = ({ children, noteSectionRef }: Props) => {
             noteStore.setState(() => ({
                 draggingTabSection: {
                     title: e.active.data.current?.tabSection.title,
-                    id: "draggingTabSection",
+                    id: e.active.data.current?.tabSection.id,
                     fileId: e.active.data.current?.tabSection.fileId,
                     xy: {
                         x: e.active.data.current?.tabSection.xy.x,
@@ -114,10 +114,11 @@ const NoteDragContext = ({ children, noteSectionRef }: Props) => {
 
     }
     const handleDragEnd = (event: DragEndEvent) => {
-        document.querySelectorAll(".accordion").forEach((el) => {
-            el.removeAttribute("opening")})
+        setTimeout(() => {
+            setAllTabsTitleMode(false);
+            noteStore.setState(() => ({ draggingTabSection: null }));
+        }, 400)
         noteStore.setState(() => ({ draggingTab: null }));
-        noteStore.setState(() => ({ draggingTabSection: null }));
         const { active, over } = event;
         if (!over) return;
         const activeId = active.id;
@@ -133,9 +134,10 @@ const NoteDragContext = ({ children, noteSectionRef }: Props) => {
     }
     const tabActive = noteStore(state => state.draggingTab)
     const collision = tabActive ? rectIntersection : pointerWithin
+    const modifier = tabActive ? [restrictToParentElement] : [snapCenterToCursor]
     return (
-        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} autoScroll={false} collisionDetection={collision}
-            sensors={sensor} onDragOver={handleDragOver} modifiers={[restrictToElement(noteSectionRef), snapCenterToCursor]}>
+        <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} autoScroll={!!tabActive} collisionDetection={collision}
+            sensors={sensor} onDragOver={handleDragOver} modifiers={modifier}>
             {children}
         </DndContext>
     )

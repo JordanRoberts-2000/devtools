@@ -9,7 +9,13 @@ import TabSectionTitle from './TabSectionTitle';
 import defaultNoteData from "../../../../data/noteSections.json"
 import Accordion from '../../../../../../components/accordian/Accordion';
 
-const TabSection = ({ id, title, index, fileId, style }: TabSectionType & { style?: React.CSSProperties }) => {
+type Props = {
+    style?: React.CSSProperties,
+    isOverlay?: true,
+    titleMode?: boolean
+} & TabSectionType
+
+const TabSection = ({ id, title, index, titleMode, fileId, style, isOverlay }: Props) => {
     const [xy, setXy] = useState<{ x: number | null, y: number | null }>({ x: null, y: null })
     const size = noteStore(state => state.tabs.find((tab) => tab.id === fileId)!.size)
     const tabSectionDragging = noteStore(state => state.draggingTabSection)
@@ -55,23 +61,25 @@ const TabSection = ({ id, title, index, fileId, style }: TabSectionType & { styl
             {...attributes} {...listeners} ref={setNodeRef} style={{ ...dragStyle, ...style }}>
 
             <TabSectionTitle id={id} title={title} />
-            <Accordion>
-                {defaultNoteData.filter((el) => el.sectionId === id).map((el) => (
-                    <div key={el.id} contentEditable="plaintext-only" onInput={() => handleOnChange()}>
-                        {el.content}
-                    </div>
-                ))}
-                {!defaultNoteData.filter((el) => el.sectionId === id).length &&
-                    // <button className="px-4 py-1 border-2 font-medium text-gray-700 rounded-md text-sm"
-                    //     onClick={() => { }}>
-                    //     add section
-                    // </button>
-                    <div contentEditable="plaintext-only" onInput={() => handleOnChange()}>
-                        eek
-                    </div>
-                    // <div>soup</div>
-                }
-            </Accordion>
+            {!isOverlay &&
+                <Accordion active={titleMode}>
+                    {defaultNoteData.filter((el) => el.sectionId === id).map((el) => (
+                        <div key={el.id} contentEditable="plaintext-only" onInput={() => handleOnChange()}>
+                            {el.content}
+                        </div>
+                    ))}
+                    {!defaultNoteData.filter((el) => el.sectionId === id).length &&
+                        // <button className="px-4 py-1 border-2 font-medium text-gray-700 rounded-md text-sm"
+                        //     onClick={() => { }}>
+                        //     add section
+                        // </button>
+                        <div contentEditable="plaintext-only" onInput={() => handleOnChange()}>
+                            eek
+                        </div>
+                        // <div>soup</div>
+                    }
+                </Accordion>
+            }
         </DraggableWrapper>
     )
 }

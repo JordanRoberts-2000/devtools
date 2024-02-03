@@ -21,5 +21,13 @@ export type TabSize = 1 | 2 | 3
 export type TabType = {
     id: number | string,
     title: string,
-    size: TabSize
+    size: TabSize,
+    titleMode?: boolean
+}
+
+export type ExplorerItemType = {
+    id: number | string,
+    title: string,
+    isFolder: boolean,
+    within_folder_id: number | string
 }

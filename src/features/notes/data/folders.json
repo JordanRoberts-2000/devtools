@@ -1,0 +1,56 @@
+[
+    {
+      "id": "random_id_1",
+      "title": "Cloud",
+      "within_folder_id": 0,
+      "isFolder": false
+    },
+    {
+      "id": "random_id_2",
+      "title": "Cyber security",
+      "within_folder_id": 0,
+      "isFolder": false
+    },
+    {
+      "id": "random_id_3",
+      "title": "Programming languages",
+      "within_folder_id": 0,
+      "isFolder": false
+    },
+    {
+      "id": "random_id_4",
+      "title": "Backend",
+      "within_folder_id": 0,
+      "isFolder": false
+    },
+    {
+      "id": "random_id_5",
+      "title": "Frontend",
+      "within_folder_id": 0,
+      "isFolder": false
+    },
+    {
+      "id": "random_id_6",
+      "title": "Operating systems",
+      "within_folder_id": 0,
+      "isFolder": false
+    },
+    {
+      "id": "random_id_8",
+      "title": "Databases",
+      "within_folder_id": 0,
+      "isFolder": false
+    },
+    {
+      "id": "random_id_8",
+      "title": "Algorithms",
+      "within_folder_id": 0,
+      "isFolder": false
+    },
+    {
+      "id": "random_id_7",
+      "title": "Misc",
+      "within_folder_id": 0,
+      "isFolder": false
+    }
+  ]

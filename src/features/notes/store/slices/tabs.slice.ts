@@ -5,27 +5,29 @@ import { v4 as uuidv4 } from 'uuid';
 
 export type TabSlice = {
     tabs: TabType[],
-    draggingTab: (TabType & { xy: { x: number | null, y: number | null } }) | null,
+    draggingTab: (Omit<TabType, "titleMode"> & { xy: { x: number | null, y: number | null } }) | null,
     addTab: () => void,
     removeTab: (id: number | string) => void,
     removeAllTabs: () => void,
     increaseTabSize: (id: number | string) => void,
     decreaseTabSize: (id: number | string) => void,
     setAllTabSizes: (size: TabSize) => void,
-    editTitle: (id: number | string, title: string) => void
+    editTitle: (id: number | string, title: string) => void,
+    toggleTitleMode: (id: number | string) => void,
+    setAllTabsTitleMode: (titleMode: boolean) => void
 }
 
 export const tabSlice: StateCreator<TabSlice> = (set) => ({
-    tabs: defaultTabData.map((tabdata) => ({ ...tabdata, size: 2 })),
+    tabs: defaultTabData.map((tabdata) => ({ ...tabdata, size: 2, titleMode: false })),
     draggingTab: null,
     addTab: () => set((state) => {
         if (state.tabs.length === 0) {
-            return { tabs: [{ id: uuidv4(), title: "default", size: 3 }] }
+            return { tabs: [{ id: uuidv4(), title: "default", size: 3, titleMode: false }] }
         }
         if (state.tabs.length === 1) {
-            return ({ tabs: [{ id: state.tabs[0].id, title: state.tabs[0].title, size: 2 }, { id: uuidv4(), title: "default", size: 2 }] });
+            return ({ tabs: [{ id: uuidv4(), title: "default", size: 2, titleMode: false }, { id: state.tabs[0].id, title: state.tabs[0].title, size: 2, titleMode: false }] });
         }
-        return { tabs: [...state.tabs, { id: uuidv4(), title: "default", size: 2 }] }
+        return { tabs: [{ id: uuidv4(), title: "default", size: 2, titleMode: false }, ...state.tabs] }
     }),
     removeTab: (id) => set((state) => {
         const filteredTabs = state.tabs.filter((el) => el.id !== id)
@@ -79,8 +81,10 @@ export const tabSlice: StateCreator<TabSlice> = (set) => ({
         // save to db
         set((state) => ({
             tabs: state.tabs.map(tab => (
-                tab.id === id ? { id: tab.id, size: tab.size, title: title } : tab)
+                tab.id === id ? { id: tab.id, size: tab.size, title: title, titleMode: tab.titleMode } : tab)
             )
         }))
-    )
+    ),
+    toggleTitleMode: (id) => set((state) => ({ tabs: state.tabs.map(el => el.id === id ? ({ ...el, titleMode: !el.titleMode }) : el) })),
+    setAllTabsTitleMode: (titleMode) => set((state) => ({ tabs: state.tabs.map(el => ({ ...el, titleMode })) })),
 });

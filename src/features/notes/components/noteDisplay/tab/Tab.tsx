@@ -10,7 +10,12 @@ import TabContent from "./TabContent";
 import DraggableWrapper from "../../../utils/DraggableWrapper";
 import TabIsDragging from "../dragging/TabIsDragging";
 
-const Tab = ({ title, id, size, style }: TabType & { style?: React.CSSProperties }) => {
+type Props = {
+    style?: React.CSSProperties,
+    isOverlay?: true,
+} & TabType
+
+const Tab = ({ title, id, size, style, titleMode, isOverlay }: Props) => {
     const increaseTabSize = noteStore(state => state.increaseTabSize);
     const decreaseTabSize = noteStore(state => state.decreaseTabSize);
     const [xy, setXy] = useState<{ x: number | null, y: number | null }>({ x: null, y: null })
@@ -63,10 +68,10 @@ const Tab = ({ title, id, size, style }: TabType & { style?: React.CSSProperties
     return (
         <div style={{ ...style, ...dragStyles }} ref={setNodeRef}
             className={tabClass}>
-            <DraggableWrapper className="p-2 border border-y-2  flex" {...attributes} {...listeners}>
+            <DraggableWrapper className="p-2 border border-b-2  flex" {...attributes} {...listeners}>
                 <TabTitle title={title} tabId={id} />
             </DraggableWrapper>
-            <TabContent tabId={id} />
+            <TabContent tabId={id} titleMode={isOverlay ? true : titleMode}/>
         </div>
     )
 }

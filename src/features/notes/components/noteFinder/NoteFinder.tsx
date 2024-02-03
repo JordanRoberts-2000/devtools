@@ -1,106 +1,38 @@
 import noteStore from "../../store/notesStore"
 import { TabSize } from "../../types";
+import Explorer from "./explorer/Explorer";
 
 const NoteFinder = ({ }) => {
     const removeAllTabs = noteStore(state => state.removeAllTabs);
     const addTab = noteStore(state => state.addTab);
+    const setAllTabsTitleMode = noteStore(state => state.setAllTabsTitleMode)
     const resetTabSizes = (size: TabSize) => {
         noteStore.setState((state) => {
-            if(state.tabs.length < 2)return state
+            if (state.tabs.length < 2) return state
             return { tabs: state.tabs.map(tab => ({ ...tab, size })) }
         })
     }
     return (
-        <div className="flex-[2] bg-gray-200 h-screen overflow-y-auto z-20">
-            <input type="text" defaultValue={"searchbar"} />
-            <ul className="flex gap-2">
-                <li>bookmarked tabs section</li>
+        <div className="flex-[2] h-screen z-20 flex flex-col">
+            <button onClick={() => addTab()} className="border-2 border-black w-fit">temp add tab</button>
+            <div className="relative m-2">
+                <svg className="w-5 h-5 fill-blue-500 absolute left-2 top-1/2 -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M8.25 10.875a2.625 2.625 0 1 1 5.25 0 2.625 2.625 0 0 1-5.25 0Z" />
+                    <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.125 4.5a4.125 4.125 0 1 0 2.338 7.524l2.007 2.006a.75.75 0 1 0 1.06-1.06l-2.006-2.007a4.125 4.125 0 0 0-3.399-6.463Z" clipRule="evenodd" />
+                </svg>
+                <input type="text" placeholder={"search"}
+                      className="border-2 pr-2 pl-8 py-1 rounded-md text-sm w-full text-gray-500"/>
+            </div>
+            <ul className="flex w-full text-sm mb-1 ml-2 gap-2">
+                <li><button onClick={() => removeAllTabs()} className="border whitespace-nowrap flex rounded-sm px-1">close all</button></li>
+                <li><button onClick={() => resetTabSizes(2)} className="border whitespace-nowrap rounded-sm px-1">save all</button></li>
+                <li><button className="border whitespace-nowrap rounded-sm px-1">disable multiple tabs</button></li>
             </ul>
-            <ul className="flex flex-col mb-4">
-                <li><button onClick={() => removeAllTabs()} className="border-2 border-black px-2">close all tabs</button></li>
-                <li><button onClick={() => addTab()} className="border-2 border-black px-2">add tab</button></li>
-                <li><button onClick={() => resetTabSizes(2)} className="border-2 border-black px-2">reset all sizes</button></li>
+            <ul className="text-sm ml-2 mb-1 flex gap-1">
+                <li><button className="border whitespace-nowrap rounded-sm px-2">resize all to default</button></li>
+                <li><button className="border whitespace-nowrap rounded-sm px-2">bookmarked</button></li>
             </ul>
-            <ul>
-                <li>----------------------------------</li>
-                <li>dragging min height</li>
-                <li>dragging min height to all sections</li>
-                <li>scroll adjust when min height moved</li>
-                <li>scroll adjust when height moved back</li>
-                <li>try snap every time to top of section</li>
-                <li>when swap snap to top of section</li>
-                <li>fix mouse center</li>
-                <li>drag overlay instant if size gt 150/default</li>
-                <li>----------------------------------</li>
-                <li>kanban board ideas</li>
-                <li>project board</li>
-                <li>drag n drop template</li>
-                <li>w/height set, w/out height</li>
-                <li>----------------------------------</li>
-                <li>remove title option</li>
-                <li>zustand subscribe, transient updates</li>
-                <li>immer?</li>
-                <li>only letters and numbers title</li>
-                <li>trim, atleast 3 letter not spaces</li>
-                <li>----------------------------------</li>
-                <li>no border if 1 section</li>
-                <li>border top if less than 3?</li>
-                <li>border top as setting</li>
-                <li>delete - are you sure?</li>
-                <li>think about undo</li>
-                <li>section component refactor</li>
-                <li>put section bottom of column fix</li>
-                <li>var height drag, sm - lg jank</li>
-                <li>exit title edit, no change</li>
-                <li>delete/add tabs</li>
-                <li>blur mode</li>
-                <li>sections title edit</li>
-                <li>edit state seperate</li>
-                <li>index edit/save/order</li>
-                <li>revert to old state</li>
-                <li>tab has changes to save?</li>
-                <li>----------------------------------</li>
-                <li>stop snap-x while dragging</li>
-                <li>snap x off atm turn on</li>
-                <li>create/fix own swap functions</li>
-                <li>0 id check, change to uuid</li>
-                <li>disable drag when just 1??</li>
-                <li>add to empty tab</li>
-                <li>draggable wrapper on section</li>
-                <li>memoize tab sections</li>
-                <li className="mb-2">dif size hover, el to mouse</li>
-                <li><strong>Goal</strong>: all sections</li>
-                <li>dont rerender on switch</li>
-                <li>----------------------------------</li>
-                <li>add sections</li>
-                <li>change tab title</li>
-                <li>change section title</li>
-                <li>editable mode?</li>
-                <li>sort by index once</li>
-                <li>blur mode</li>
-                <li>----------------------------------</li>
-                <li>make note: !!array.length</li>
-                <li>when 0 tabs what?</li>
-                <li>custom smoove autoscroll while dragging</li>
-                <li>pr-12 is causing shift</li>
-                <li>draggable overlay content from cache</li>
-                <li>border of isDragging, small shift</li>
-                <li>code split</li>
-                <li>1 tab - all sections on left</li>
-                <li>loading / error state</li>
-                <li>drag, error handling</li>
-                <li>sections view transition</li>
-                <li>notes move around</li>
-                <li>vertical scroll snap on sections</li>
-                <li>auto scroll vertical when dragging</li>
-                <li>add notes</li>
-                <li>note, code, br, list</li>
-                <li>delete notes, sections, are you sure?</li>
-                <li>custom context menu, subtitle</li>
-                <li>read more/show example</li>
-                <li>bold, italic, underline, quote, link</li>
-                <li>image and excal</li>
-            </ul>
+            <Explorer />
         </div>
     )
 }
